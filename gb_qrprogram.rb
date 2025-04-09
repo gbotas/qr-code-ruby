@@ -12,9 +12,10 @@ puts "Press 4 to exit"
 
 codetype =gets.chomp
 
-if codetype == 1 (#or anything similar):
+if codetype == 1 #or anything similar
   puts "What is the URL you would like to encode?"
-  url = gets.chomp
+  puts
+  text = gets.chomp
   puts "What would you like to call the PNG?"
   png_name = gets.chomp
   #provide qr using url. maybe requiring another file?
@@ -40,5 +41,19 @@ elsif codetype == 4
 
 else 
   puts "Didn't recognize that selection. Please try again."
+end
 
-  
+
+#Use the RQRCode:: QRCode class to encode some text
+
+qrcode = RQRCode::QRCode.new(text.to_s)
+
+#qrcode = RQRCode::QRCode.new("WIFI:T:WPA;S:UPC303;P:UPCPark303S;;")
+
+#qrcode = RQRCode::QRCode.new("SMSTO:+countrycode and number: Hola Pepsicola!")
+
+# Use the /as_png method to create a 500 px by 500 px image
+png = qrcode.as_png({ :size => 500})
+
+# Write the image data to a file
+IO.binwrite(png_name.to_s, png.to_s)
