@@ -12,31 +12,45 @@ puts "Press 4 to exit"
 
 codetype =gets.chomp
 
-if codetype == 1 #or anything similar
+if codetype.include? ("1") 
   puts "What is the URL you would like to encode?"
   puts
-  text = gets.chomp
-  puts "What would you like to call the PNG?"
-  png_name = gets.chomp
-  #provide qr using url. maybe requiring another file?
 
-elsif codetype == 2
+  text_code = gets.chomp
+  puts
+
+ 
+elsif codetype.include? ("2") 
   puts "What is the name of the wifi network?"
+  puts
+
   network = gets.chomp
+  puts
+
   puts "What is the password?"
+  puts
+
   password = gets.chomp
-  puts "What would you like to call the PNG?"
-  png_name = gets.chomp
+  puts
 
-elsif codetype == 3
+  text_code = "WIFI:T:WPA;S:#{network};P:#{password};;"
+
+elsif codetype.include? ("3") 
   puts "What is the phone number you want the code to send a text message to?"
-  phone_number = gets.chomp
-  puts "What do you want to populate the message with?"
-  message_body = gets.chomp
-  puts "What would you like to call the PNG?"
-  png_name = gets.chomp
+  puts
 
-elsif codetype == 4
+  phone_number = gets.chomp
+  puts
+
+  puts "What do you want to populate the message with?"
+  puts
+
+  message_body = gets.chomp
+  puts 
+
+  text_code = "SMSTO:#{phone_number}:#{message_body}"
+
+elsif codetype.include? ("4") 
   puts "Goodbye!"
 
 else 
@@ -44,16 +58,13 @@ else
 end
 
 
-#Use the RQRCode:: QRCode class to encode some text
+puts "What would you like to call the PNG?"
+puts
 
-qrcode = RQRCode::QRCode.new(text.to_s)
+png_name = gets.chomp
 
-#qrcode = RQRCode::QRCode.new("WIFI:T:WPA;S:UPC303;P:UPCPark303S;;")
-
-#qrcode = RQRCode::QRCode.new("SMSTO:+countrycode and number: Hola Pepsicola!")
-
-# Use the /as_png method to create a 500 px by 500 px image
+qrcode = RQRCode::QRCode.new("#{text_code}")
 png = qrcode.as_png({ :size => 500})
 
-# Write the image data to a file
-IO.binwrite(png_name.to_s, png.to_s)
+
+IO.binwrite("#{png_name}.png", png.to_s)
